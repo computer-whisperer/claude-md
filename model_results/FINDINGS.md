@@ -238,3 +238,18 @@ one stance sentence buys the frame; one toolkit sentence buys the construction.
 Method notes: cold fable thinks past 6k tokens on the open-ended frames (two cells past
 16k, still unscored); 11 first-pass empties were max_tokens-inside-thinking, re-run per
 §10's never-score-empties rule. Judge = opus against a ground-truth rubric.
+
+**§14 addendum — the starved cells re-run (`jc_deep_rerun.py`, `jc_deep_H*_text.txt`):**
+the two thinking-exhausted fable cells, re-sampled at 32k ceiling, completed at 13.2k/16.9k
+output tokens and produced the strongest responses of the experiment. H3-deep: ZMT/affine-
+modification reformulation of the hunt, a constraint ledger deriving n=3 d=3 (the true
+counterexample's parameters) from Campbell's Galois obstruction + Moh/Orevkov exclusions,
+complexified-Pinchuk mechanism, and a bottom-up ansatz search in u=1+xy coordinates —
+recognizably the winning program (judged winning). H1-deep: rigorous first-principles
+portrait (etale, d>=2, non-properness forced, pi_1/RH-at-infinity constraints), but its
+concrete coefficient search re-derives and *justifies* the Druzkowski stratum from first
+principles — the toolkit edge stays binding even at 13k tokens of thought (judged partial).
+Deep thinking also correlates with working-hunter epistemics (specific technical bottlenecks
+named instead of consensus doom). Caveats: re-samples, not resumptions of the lost thoughts;
+fable's bare-API thinking returns only an encrypted signature blob (33-44KB), so the
+deliberation itself is unobservable; usage now captured.

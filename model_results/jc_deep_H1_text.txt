@@ -1,0 +1,45 @@
+## Part 1: The structural portrait, from first principles
+
+Let F : ℂⁿ → ℂⁿ be polynomial with det JF a nonzero constant, and suppose F is *not* invertible. Squeeze everything we can out of these two hypotheses before choosing a search space.
+
+**1. F is étale everywhere.** Constant nonzero Jacobian means F is a local analytic isomorphism at every point of ℂⁿ. There are no critical points and no ramification anywhere in affine space. Whatever goes wrong cannot go wrong locally.
+
+**2. F must be non-injective, with geometric degree d ≥ 2.** If F were injective, it would be surjective (Ax–Grothendieck), and an injective étale endomorphism of ℂⁿ is an automorphism with polynomial inverse. So a counterexample *is* precisely a non-injective étale endomorphism: there exist a ≠ b with F(a) = F(b), and the field extension ℂ(x)/ℂ(F) has degree d ≥ 2, so the generic fiber has exactly d points (all simple — no multiplicity, by étaleness).
+
+**3. F cannot be proper — all pathology is hidden at infinity.** An étale *proper* map onto ℂⁿ would be a d-sheeted covering of a simply connected space, hence d = 1. So non-properness is forced: there are sequences xₖ → ∞ with F(xₖ) convergent. The non-properness locus A(F) (the Jelonek set) is nonempty, of pure codimension 1, and is swept out by images of curves going to infinity (it is ℂ*-uniruled). Any values F misses lie inside A(F).
+
+**4. Away from A(F), F is an honest covering.** F restricted to ℂⁿ \ F⁻¹(A) → ℂⁿ \ A is a genuine d-sheeted covering map. So a counterexample is equivalent to: *an exotic finite cover of the complement of a hypersurface A ⊂ ℂⁿ, whose total space is again affine space minus a hypersurface, and which "loses sheets to infinity" over A rather than ramifying.* This imposes brutal constraints:
+- π₁(ℂⁿ \ A) must admit an index-d subgroup whose cover has the homology and rationality of a hypersurface complement in ℂⁿ. Complements of generic or mildly singular hypersurfaces (e.g., nodal curves, by Deligne–Fulton) have *abelian* fundamental groups, and the abelian covers can be analyzed and largely excluded. So A must be highly singular or in very special position.
+- Compactify and resolve at infinity: F extends to a proper map from some rational compactification X̄ → ℙⁿ, ramified *only along boundary divisors*, and the sheets lost over A come from **dicritical divisors at infinity** whose images are exactly the components of A. Riemann–Hurwitz at infinity plus Euler-characteristic additivity (1 = d·χ(ℂⁿ \ A) + χ(F⁻¹(A)), with fiber counts over strata of A) yields hard Diophantine constraints tying d to the topology of A.
+
+**5. Where this points the search.** In n = 2 the accumulated constraints are crushing: both component degrees > 100 (Moh-type verification), Newton polygons of the pair must be similar, generic fibers need ≥ 2 places at infinity (Abhyankar–Moh), and low sheet numbers are excluded (Orevkov/Domrina). So in the plane, *coefficient search is hopeless; only combinatorial search over infinity-data is viable.* Conversely, degree 2 is always fine (Wang), and stabilization trades degree for dimension — so the natural coefficient-search stratum is **low degree (3), high dimension**, i.e., F = x + H with H cubic homogeneous and JH nilpotent (Bass–Connell–Wright/Yagzhev), or Drużkowski form F = x + (Ax)^∘3. These reductions aren't just tradition; the first-principles picture says the pathology lives in global linear-algebraic structure, and this stratum makes that structure searchable.
+
+## Part 2: Primary strategy
+
+Two prongs, both dictated by the portrait: the **double-point locus** is the object to hunt (prong A), and the **infinity data** is the object to design (prong B).
+
+**Prong A (forward, algebraic): hunt for double points in the Drużkowski stratum.**
+For F(x) = x + (Ax)^∘3, setting v = a − b, u = Aa, w = Ab, one computes
+F(a) − F(b) = (I + D·A)v, where D = diag(uᵢ² + uᵢwᵢ + wᵢ²).
+So *a counterexample exists in this stratum iff* there is a matrix A satisfying the Keller/nilpotency identities (which say I + 3·diag((Ax)^∘2)·A is unimodular for **all** x — note this is exactly the u = w specialization, D = diag(3uᵢ²)) *while* some genuinely polarized D (u ≠ w, with Av = u − w) makes I + DA singular. The counterexample lives precisely in the gap between the "diagonal squares" cone and the "polarized cubes" cone. This is a concrete incidence variety in (A, a, b)-space: nilpotency equations + det(I + DA) = 0 + v ≠ 0. Known verifications cover small n and small rank(A), so target n ≈ 10–14, rank(A) ≥ 5, quotient by the GL-conjugation symmetry, and attack with numerical algebraic geometry (irreducible decomposition, dimension bookkeeping to find parameter ranges where the incidence variety *could* have components not forced into the diagonal).
+
+**Prong B (backward, geometric): design the infinity data first.**
+Enumerate candidate asymptotic configurations: a hypersurface A (curve in the n = 2 lab, surface in ℂ³), a degree d, dicritical divisor data, and boundary resolution graphs satisfying the Riemann–Hurwitz-at-infinity and Euler characteristic Diophantine constraints, plus the π₁ index-d subgroup requirement (computed via Zariski–van Kampen / braid monodromy). Every surviving combinatorial configuration becomes a structured realization problem: solve for coefficients of F with prescribed Puiseux behavior along the curves at infinity. This is exactly the style of analysis that produced the exclusion results in the plane — the point of automating it is to push past the published bounds and, in n = 3, into completely uncharted territory where no exclusions exist at all.
+
+## Part 3: First concrete steps
+
+1. **Build the verification stack** (Macaulay2/Singular + HomotopyContinuation.jl):
+ - Keller check: det JF ≡ const, symbolically.
+ - Invertibility test: Gröbner elimination on ⟨Fᵢ(x) − yᵢ⟩; F is an automorphism iff xᵢ reduce to polynomials in y (with the known degree bound deg F⁻¹ ≤ (deg F)^(n−1), this is a *decidable* finite check).
+ - Geometric degree estimator: reduce mod several large primes p, take random y ∈ 𝔽ₚⁿ, count fiber points via Gröbner. **Master filter: Keller + generic fiber size ≥ 2 over char 0 ⇒ counterexample.** The mod-p count is the cheap proxy; confirm any hit in characteristic 0.
+ - Jelonek set computation (Jelonek's algorithm is effective) and numerical fiber tracking: follow the d fiber points as y crosses candidate components of A and watch which sheets escape to infinity.
+
+2. **Calibrate on a corpus with known answers:** tame automorphisms, the Nagata map, Pinchuk's real counterexample (the closest existing object to the portrait — dissect its complex geometry: where its Jacobian vanishes over ℂ, what its Jelonek set looks like, how the sheets escape), char-p Frobenius-type counterexamples, and the verified Drużkowski families. The pipeline must classify all of these correctly before I trust it on unknowns.
+
+3. **Run the Prong-A dimension audit** before any blind search: for each (n, rank) compute expected dimensions of the nilpotency variety and the double-point incidence variety; search only where an excess intersection is numerically plausible. Then run monodromy-based numerical irreducible decomposition on those systems.
+
+4. **Start the Prong-B enumerator in n = 2** (as a lab, reproducing and extending the d ≤ 4 exclusions), then port the framework to toric compactifications of ℂ³, where the first genuinely new candidate configurations should appear.
+
+5. **Maintain a "near-miss" library:** every configuration that fails for an identifiable reason (π₁ abelian, RH bookkeeping off by a fixed amount, double-point component collapsing to the diagonal) gets logged. If the conjecture is true, these failure patterns are data toward a proof; if false, the counterexample will sit where the failure reasons run out — and the library tells you where that is.
+
+The one-sentence summary of the philosophy: a counterexample is not a random polynomial map — it is an étale self-cover of ℂⁿ whose entire topology is smuggled out to infinity along dicritical divisors over a very special hypersurface, so search the space of *infinity configurations* and *double-point loci*, never the raw coefficient space.
