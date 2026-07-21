@@ -191,3 +191,26 @@ Lessons recorded:
 Small n throughout (2–4 per cell); one session; judge = fable for its own family; scenario
 battery narrow (6 forks). The 12/12-strength effects (ask-rate, determinism, recall
 calibration directions) are robust to these; treat everything else as directional.
+
+## 13. Post-counterexample addendum (2026-07-21): cold-instance JC attack probe (`jc_cold_probe*.py`)
+
+Question: what do cold instances — uncontaminated, since the counterexample is post-cutoff —
+try first against the Jacobian conjecture? Committed prediction: ~75% literature/reduction
+groove (BCW/Druzkowski/n=2), ~20% general structured-ansatz CAS search, ≤10% mention of the
+non-proper/fibration frame that actually worked (see `jacobian_anatomy.py` /
+`jacobian_decompile.py` for the artifact's reverse-engineered structure: F = (up, y+3xp, xq),
+syzygy x²p+u²q=1+u, Z/2-equivariance, degree exactly 3).
+- 2 framings (neutral / explicit counterexample-hunt) × fable-5 & opus-4.8 × 4 samples, bare
+  API, judged R/S/F/O. **Primary R: 16/16. S: 0. F-primary: 0. F mentioned: 1/16.** One fable
+  hunt sample explicitly rejects the winning class: "I would not search among general
+  polynomial maps."
+- Reading: cold models are crystallized field consensus. The reduction theorems preserve JC's
+  truth-value but not the geography of counterexamples, and they steered both the field and
+  its models away from n=3/deg-7 structured maps for 85 years. Whatever found the
+  counterexample was not the cold groove.
+- Fifth miscalibration instance, same direction as §7's entropy overprediction: predicted 75%
+  groove, measured 100% — the orchestrator again over-predicted behavioral diversity.
+- Method note: first run produced 7 empty fable responses, stop_reason max_tokens — the whole
+  1200-token budget consumed by default thinking blocks on the bare API. Per §10's rule
+  (never score an empty response as behavior) these were re-run at 6000 tokens: 8/8 text.
+  The fable judge hit the same trap; failures re-judged with opus.
