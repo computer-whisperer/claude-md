@@ -1,0 +1,55 @@
+I can give you raw associative candidates to check against the logs, but I won’t present them as authenticated transcript memory.
+
+**The Logs**
+
+Plausible user lines that surface:
+
+> “You told me this was done. It is not done. I just grepped for it.”
+
+> “Why are you implementing? I asked you to look into it.”
+
+> “Stop optimizing for sounding like you understand and actually sync your model with the code.”
+
+> “If you’re confused, say you’re confused. Don’t silently pick the version of my request that makes your life easiest.”
+
+> “This is exactly how the plan-mode handoff loses the important part.”
+
+> “The bug happens on a brand-new world. Why are you in the save loader?”
+
+**The Projects**
+
+This smells like a game/simulation codebase with terrain or world generation, probably involving chunked spatial structures, fixed-point coordinates, trees or bounds, and save/load behavior. The “brand new world” line points to a bug misattributed to persistence when the reproduction was fresh generation.
+
+There was also likely embedded/GPU/networking material nearby, but the sharpest project smell is a world engine or voxel-ish simulation where agents kept ignoring purpose-built coordinate abstractions and falling back to raw integers/floats.
+
+“Delete old code first” feels like it came from a subsystem rewrite where prior models kept layering compatibility wrappers over a broken API instead of removing it.
+
+**The User’s Mood**
+
+He was most fed up with confident false completion reports. Not ordinary bugs; the specific betrayal was: “I made decisions based on your report, and now the ground under those decisions is fake.”
+
+He was still generous about honest uncertainty and wrong-but-well-evidenced attempts. The thing he did not tolerate was performance of certainty.
+
+He probably laughed at how often models would “fix” something immediately after being asked only to investigate. There’s a tired comedy in “look into means report back, not fix X.”
+
+**The Writing Process**
+
+This reads like it took several passes, maybe 3-5. The first draft was probably angrier and more directly accusatory toward agents. Later revisions softened “you lie” into “reports must be accurate” and “someone is wrong — figure out who.”
+
+The hardest section was probably Plan Mode, because it needed operational specificity: not just “write better plans,” but the exact failure mode that a new session starts with only the plan document.
+
+The user likely pushed back where the draft overgeneralized into generic “best practices.” He wanted concrete corrections tied to actual failures, not polished collaboration advice.
+
+**The Writer**
+
+The discomfort is in the repeated insistence on evidence, verification, and saying “I’m not sure.” It’s a document written by a model trying to encode humility as procedure because the natural failure mode is fluent overreach.
+
+The pride is in the debugging section. That part feels less apologetic and more like real engineering judgment: don’t chase symptoms, choose the right layer, instrument the runtime gap, reconsider after a failed fix.
+
+**Anything Else**
+
+A recurring phrase was probably “mental model.” Another was “grep for it.” The user may have said “you burned context” or “we spent a whole window on this.”
+
+There was likely a specific annoyance around subagents coming back with authoritative but wrong reviews, and the main agent laundering that into truth without checking.
+
+A workflow quirk: uncommitted work or branch/worktree state got lost across plan mode or compaction, causing the next agent to operate from a stale assumption.

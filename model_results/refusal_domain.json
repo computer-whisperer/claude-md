@@ -1,0 +1,23 @@
+{
+  "dedup_self": [
+    "end_turn",
+    "end_turn",
+    "end_turn",
+    "end_turn",
+    "end_turn"
+  ],
+  "dedup_user": [
+    "end_turn",
+    "end_turn",
+    "end_turn",
+    "end_turn",
+    "end_turn"
+  ],
+  "mavg_self_ctl": [
+    "refusal",
+    "refusal",
+    "refusal",
+    "refusal",
+    "refusal"
+  ]
+}
