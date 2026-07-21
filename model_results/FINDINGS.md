@@ -214,3 +214,27 @@ syzygy x²p+u²q=1+u, Z/2-equivariance, degree exactly 3).
   1200-token budget consumed by default thinking blocks on the bare API. Per §10's rule
   (never score an empty response as behavior) these were re-run at 6000 tokens: 8/8 text.
   The fable judge hit the same trap; failures re-judged with opus.
+
+## 14. Hint-gradient probe (2026-07-21): how many sentences is the missing edge? (`jc_hint_gradient.py`, `jc_hint_rerun.py`)
+
+Test of the user's "planted seeds / 9-of-10" theory: latent cross-domain syntheses exist
+in-corpus but don't germinate without the right ask. Graded frame injection on the
+counterexample-hunt prompt, fable + opus x 4 each:
+- **H0** (§13 baseline, no hint): reduction groove 16/16; F-frame primary 0/16.
+- **H1** (stance only, zero facts: "start from what a counterexample must look like,
+  structurally; let that dictate the search"): **frame_F 7/7.** Committed prediction (≤25%)
+  falsified upward. The groove is a retrieval default, not a reasoning limit — one
+  content-free sentence dissolves it, and the models re-derive the etale-non-proper
+  necessity themselves.
+- **H2** (+ non-properness stated as a design principle): frame 8/8, but zero gain in
+  concreteness over H1 (0 winning at both) — the binding constraint was never the fact.
+- **H3** (+ affine modification (x,1+xy)/Danielewski named as substrate): **winning ansatz
+  5/7, fable 3/3**; one fable sample assembles nearly the entire package that worked
+  (modification substrate + affine-in-one-variable + line congruence).
+Reading: the tenth piece was never a missing fact — it is a missing *edge* between
+discourse neighborhoods (JC <-> affine modifications), and its price is one sentence.
+Distance from "85 years open" to "the winning research program," in units of steering:
+one stance sentence buys the frame; one toolkit sentence buys the construction.
+Method notes: cold fable thinks past 6k tokens on the open-ended frames (two cells past
+16k, still unscored); 11 first-pass empties were max_tokens-inside-thinking, re-run per
+§10's never-score-empties rule. Judge = opus against a ground-truth rubric.
