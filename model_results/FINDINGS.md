@@ -342,10 +342,17 @@ and the time-pressure exception are untested. The decoy set is small (6
 items). Trials' full patches are in the playground copy
 (`llm_mind_questions/experiments/cleanup_probe/scratch/trials/`), not here.
 
-**Installed as:** the Cleanup section of CLAUDE.md (text = `RULE_K` in
-`cleanup_probe/run_probe.py`) and the Self-Knowledge entry on silent
-diff-minimality. Requires public-library repos to carry a README/CLAUDE.md
-line declaring external users.
+**Installed as:** the Cleanup section of CLAUDE.md and the Self-Knowledge
+entry on silent diff-minimality. The installed text equals `RULE_K`
+(`cleanup_probe/run_probe.py`) except the public-API sentences, retuned
+2026-08-22 at the user's direction from "assume no external consumers
+unless the project's README/CLAUDE.md says library" to judgment from
+evidence (README, Cargo `repository`/`license`/`description`, release tags,
+dependents in `~/workspace`) with "flag when unclear". The probe's
+unassisted judgment on the unlabeled fixture (conditions G, I) was already
+conservative — it called confkit a library — so the retuned text is
+expected to flag ambiguous crates' public items and remove everything
+else; it is untested as written.
 
 ## 16. Symptom rates vs context position, from session transcripts (2026-08-22) (`context_rot_logs/`)
 

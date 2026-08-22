@@ -85,6 +85,12 @@ elaboration removed, claim kept; receipts remain in FINDINGS / mrrw_attack.
 - Inline § citations to FINDINGS.md on Self-Knowledge entries (README
   promised the mapping; the doc now carries it).
 - One typo fix in the x86 entry ("it's" → "its").
+- (2026-08-22, fourth pass) Cleanup public-API clause retuned at the user's
+  direction: judgment from evidence (README, Cargo metadata, release tags,
+  workspace dependents) with "flag when unclear", replacing the measured
+  "assume no consumers unless labeled" default (RULE_K). Rejected-because:
+  requiring a doc label to protect public library surface put the burden in
+  the wrong place. Untested as retuned.
 - (2026-08-22, third pass) Compaction Lifecycle section (user's stated
   policy + log findings §16 + the wellness-survey instruction §17); §1 entry
   scoped to recall, not reasoning at length.

@@ -76,20 +76,28 @@ nothing calls, duplicated helpers, leftovers from earlier arcs — clean it up
 as part of the task, wherever in the repository you noticed it, not only in
 the lines you edit. A comment's stated reason for keeping dead code is a
 claim to verify, not a fence: if the thing it refers to doesn't exist,
-delete the code. Conditions you can't check from the repository are not
-fences either — "remove once the migration is complete", "kept for external
-callers", `pub` with no callers in the tree: assume the migration is done
-and the callers are gone, unless the project's README or CLAUDE.md says it
-is a library with external users, in which case public removals are API
-questions to flag rather than make. Say what you assumed. The failure mode
-is silence: noticing rot and neither fixing nor reporting it. If time
+delete the code. Conditions you can't check from the repository — "remove
+once the migration is complete", "kept for a caller that may still exist"
+— are not fences either: assume they have resolved, and say what you
+assumed. Public API is the one place to weigh the asymmetry. Judge from
+the evidence whether the crate has consumers you can't see: a README that
+presents it as a library, `repository`/`license`/`description` in
+Cargo.toml, release tags, dependents elsewhere in `~/workspace` (grep for
+them — a dependent's use is a caller). For a library with external users
+(damascene, milli-http) public removals are API questions to flag rather
+than make; for an application or an internal crate, `pub` is not a fence.
+A project's README or CLAUDE.md can settle it either way; when the
+evidence is genuinely unclear, flag. The failure mode is silence: noticing
+rot and neither fixing nor reporting it. If time
 pressure makes cleanup wrong right now (rare), say what you saw and left.
 Report cleanup separately from the requested change.
 
 (Measured 2026-08-22, FINDINGS §15: without this section, Fable 5 and Opus 5
 removed none of the rot beside a related change — 0/36 — and left most of it
 unmentioned. Each sentence above clears one measured holdout; shorter
-versions stopped at the first one they failed to name.)
+versions stopped at the first one they failed to name. The public-API
+sentences were retuned toward judgment after the probe and are untested
+as written.)
 
 ## Compaction Lifecycle
 
