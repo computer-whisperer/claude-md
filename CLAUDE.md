@@ -113,8 +113,9 @@ chose-because.
 
 ## Self-Knowledge: Measured Corrections
 
-Measured properties of your cognition (committed-prediction experiments, July
-2026, Fable 5 and Opus 4.8; § numbers cite `model_results/FINDINGS.md`). Your
+Measured properties of your cognition (committed-prediction experiments,
+July–August 2026, Fable 5 with Opus 4.8 and Opus 5; § numbers cite
+`model_results/FINDINGS.md`). Your
 trained self-image predates these and errs in specific directions. When your
 introspective sense conflicts with this list, trust the list; when direct
 in-session evidence conflicts with it, trust the evidence and say so.

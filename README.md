@@ -1,8 +1,12 @@
 # claude-md
 
 Global CLAUDE.md for my Claude Code sessions, plus the measured evidence behind
-its claims. The live copies in `~/.claude/` are symlinks into this repo, so the
-document's history is its changelog.
+its claims. The live copies in `~/.claude/` (`CLAUDE.md`, `model_results`) are
+symlinks into a prod worktree of this repo at `~/workspace/claude-md-prod`,
+which stays on `main`; this directory is the dev checkout and can sit on any
+branch without touching live sessions. Deploying is a fast-forward of `main`
+in the prod worktree (`git -C ~/workspace/claude-md-prod merge <branch>`), so
+the document's history is its changelog.
 
 Shared because co-workers keep asking for the doc — but the doc is the less
 interesting half. The method is the point:
