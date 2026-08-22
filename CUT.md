@@ -85,6 +85,10 @@ elaboration removed, claim kept; receipts remain in FINDINGS / mrrw_attack.
 - Inline § citations to FINDINGS.md on Self-Knowledge entries (README
   promised the mapping; the doc now carries it).
 - One typo fix in the x86 entry ("it's" → "its").
+- (2026-08-22, second pass) Cleanup section — text `RULE_K` from the
+  cleanup probe, measured FINDINGS §15 — plus a Self-Knowledge entry on
+  silent diff-minimality, and the preamble now names Cleanup among the
+  sections that correct measured defaults.
 
 ## Validation before install (not yet run)
 

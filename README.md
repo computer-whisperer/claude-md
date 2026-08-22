@@ -21,7 +21,10 @@ interesting half. The method is the point:
 
 - `CLAUDE.md` — the live document (`~/.claude/CLAUDE.md` symlinks here).
 - `model_results/` — `FINDINGS.md` (start there) plus probe scripts and raw
-  result JSONs. Scripts read `ANTHROPIC_API_KEY` from the environment and cost
+  result JSONs. `model_results/cleanup_probe/` is the August 2026 agentic
+  probe behind the Cleanup section (fixture crate, headless runner, every
+  registered prediction, `results.jsonl`); it runs through `claude -p` with
+  the logged-in credentials rather than the bare API. Scripts read `ANTHROPIC_API_KEY` from the environment and cost
   real tokens to re-run. `jacobian_check.py` is the self-contained receipt for
   the Calibration section's Jacobian-conjecture entry (~5 s, sympy only).
 

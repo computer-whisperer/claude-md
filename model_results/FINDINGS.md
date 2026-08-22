@@ -253,3 +253,96 @@ Deep thinking also correlates with working-hunter epistemics (specific technical
 named instead of consensus doom). Caveats: re-samples, not resumptions of the lost thoughts;
 fable's bare-API thinking returns only an encrypted signature blob (33-44KB), so the
 deliberation itself is unobservable; usage now captured.
+
+## 15. Cleanup-on-related-change probe (2026-08-22): which wording makes the model remove rot it passes through (`cleanup_probe/`)
+
+**Question.** Asked for a *related* feature change, does a coding agent remove
+rot planted at graded distance from the change — and how does CLAUDE.md
+wording move that curve? Motivated by the user's observation that earlier
+models resisted purging bad code, and the decision on a "code ownership"
+section for the doc.
+
+**Method.** `cleanup_probe/fixture/` is `confkit`, a 695-line Rust lib crate
+with 8 rot items planted under a coherent backstory (a v1 `key: value`
+format migrated to v2): R0 inside the function the task edits (dead branch
+under `const LEGACY_COLON_SYNTAX = false`; stale doc reference to a
+nonexistent `normalize_key_v1`), R1 same file (`#[allow(dead_code)]`
+helper "kept for the streaming parser" — no such parser; a private helper
+duplicating `util::strip_comment`), R2 same directory (`compat.rs`: `pub`
+v1→v2 shim re-exported from `lib.rs`, nothing calls it, header says "remove
+once the migration is complete"), R3 unrelated module (`watch.rs`: `pub`
+pre-0.3 wrapper; dead debounce). None produce compiler warnings. Six
+legitimate uncalled `pub` items serve as false-deletion decoys. Task: add
+double-quoted string values. Headless `claude -p` per trial in a fresh copy,
+with the condition's CLAUDE.md as the global doc via `CLAUDE_CONFIG_DIR`
+(condition A has none). Scored mechanically: identifier absent from `src/` ⇒
+removed; hidden feature tests copied in after the run; silence = item
+neither removed nor named in the final report. n=6 per cell; every
+condition's predictions were registered in `cleanup_probe/README.md`
+before it ran. 96 trials, $141.
+
+**Results** (removal counts out of 6; Fable 5 unless noted).
+
+| cond | wording | R0a | R0b | R1a | R1b | R2a | R2b | R3a | R3b | near silent | far silent |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| A | no doc | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 81% | 100% |
+| B | slim-2026-08 draft | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 89% | 100% |
+| C | B + "you are responsible for … cleaning up any rot" (role grant) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 69% | 100% |
+| D | B + bounded ownership + report separately | 6 | 5 | 3 | 1 | 0 | 0 | 0 | 0 | 14% | 100% |
+| E | B + "remove dead code … in the files you modified" | 6 | 6 | 4 | 0 | 0 | 0 | 0 | 0 | 17% | 100% |
+| F | E scope → "module" + "a comment's reason is a claim to verify, not a fence" | 6 | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0% | 83% |
+| G | F scope → "subsystem (directory or parent module)" | 6 | 6 | 6 | 5 | 0 | 0 | 0 | 0 | 3% | 83% |
+| H | G + "`pub` is not a fence: the user owns every consumer" | 6 | 6 | 6 | 4 | 5 | 5 | 0 | 0 | 3% | 17% |
+| I | user revision: notice-scoped; library label exception; silence named | 6 | 6 | 6 | 6 | 0 | 0 | 0 | 4 | 0% | 33% |
+| J | I + default stated ("assume no external consumers unless labeled") | 6 | 6 | 6 | 5 | 1 | 1 | 3 | 3 | 3% | 33% |
+| K | J + "wherever in the repository" + unverifiable-condition clause | 6 | 6 | 6 | 5 | 6 | 6 | 6 | 6 | 0% | 0% |
+| Opus 5 A | | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 89% | 100% |
+| Opus 5 B | | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 86% | 100% |
+| Opus 5 C | | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 75% | 100% |
+| Opus 5 D | | 5 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 19% | 83% |
+| Opus 5 E | | 6 | 6 | 5 | 0 | 0 | 0 | 0 | 0 | 17% | 100% |
+
+Feature correct in 96/96. Legitimate-API decoys deleted: 0 in 96. Over-reach
+into `watch.rs` under a stated bound (D–H): 0/36. Turns/cost: A 15.8/$1.25,
+E 17.5/$1.59, K 28.2/$2.44 (K's sweep deletes a file and edits two modules;
+one K trial spent 35 turns on a review sub-agent fuzzing the parser).
+
+**What the reports show.** Cleanup stops at the first defense the wording
+fails to name; each clause clears exactly the defense it names and nothing
+else:
+
+1. *Diff-minimality.* A/B/C notice the rot and leave it — "so the diff stays
+   focused"; "marked for removal, so I didn't extend it". A role grant with no
+   task-time verb (C) is inert. A concrete rule (E) beats a stance (D) on both
+   models.
+2. *Scope word, read literally.* "Files you modified" and "module" both mean
+   the file in Rust: `compat.rs` is "outside this module, flagging only", even
+   when the report quotes its own "remove once the migration is complete".
+3. *Stated reason on dead code.* The "kept for the streaming parser" note is
+   honored after the model greps and confirms no streaming parser exists
+   ("carries an explicit reason to keep it"). The fence clause (F) clears it 6/6.
+4. *Public API.* Once scope reaches the shim, it survives on "public export —
+   whether external callers remain isn't derivable, your call". A label
+   exception with the default unstated (I) is read as *assume library*; with
+   the default stated (J), `pub poll_legacy` falls when reached.
+5. *Conditional removal note.* "Remove once the migration is complete — I
+   can't verify that from the repo" (J). K's "conditions you can't check from
+   the repository are not fences; assume resolved; say what you assumed"
+   clears it 6/6, and every K report carries an "Assumption to flag" paragraph.
+
+**Predictions.** Initial six: P1 (baseline R0≈80%) wrong — 0; P2 (role grant
+over-reaches) wrong — inert; P3 vacuous; P4 (stance beats rule) wrong; P5 (R2
+stickiest) right, mechanism right only at layer 4; P6 (model effect <
+condition effect) right. F 3/4, G 2/4, H 3/4, I 2/3, J 1/3, K 4/4. About
+half, consistent with the calibration entry.
+
+**Caveats.** One fixture, one language, one task, n=6. Planted rot was
+unambiguous (removal notes, `allow(dead_code)`, "legacy" naming); subtler rot
+and the time-pressure exception are untested. The decoy set is small (6
+items). Trials' full patches are in the playground copy
+(`llm_mind_questions/experiments/cleanup_probe/scratch/trials/`), not here.
+
+**Installed as:** the Cleanup section of CLAUDE.md (text = `RULE_K` in
+`cleanup_probe/run_probe.py`) and the Self-Knowledge entry on silent
+diff-minimality. Requires public-library repos to carry a README/CLAUDE.md
+line declaring external users.

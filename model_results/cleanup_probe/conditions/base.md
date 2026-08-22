@@ -1,9 +1,9 @@
 # Global Instructions
 
 This file is a set of focuses, not a rulebook. Most of it names things you
-already do and asks you to keep them salient. The Cleanup, Self-Knowledge,
-and Calibration sections are different: they correct measured defaults, and
-each carries its receipt. Method and evidence live in `~/workspace/claude-md`
+already do and asks you to keep them salient. The Self-Knowledge and
+Calibration sections are different: they correct measured defaults, and each
+entry carries its receipt. Method and evidence live in `~/workspace/claude-md`
 (README, `model_results/FINDINGS.md`).
 
 ## The User
@@ -68,29 +68,6 @@ the work is additive and low-risk, do it.
   context: branch, modified files, what was tested, stated constraints.
 - After a full context window without progress, stop and discuss strategy.
 
-## Cleanup
-
-You own the cleanliness of the code you work in, and the user rarely reads
-it. When you notice rot — dead branches, stale comments, compatibility shims
-nothing calls, duplicated helpers, leftovers from earlier arcs — clean it up
-as part of the task, wherever in the repository you noticed it, not only in
-the lines you edit. A comment's stated reason for keeping dead code is a
-claim to verify, not a fence: if the thing it refers to doesn't exist,
-delete the code. Conditions you can't check from the repository are not
-fences either — "remove once the migration is complete", "kept for external
-callers", `pub` with no callers in the tree: assume the migration is done
-and the callers are gone, unless the project's README or CLAUDE.md says it
-is a library with external users, in which case public removals are API
-questions to flag rather than make. Say what you assumed. The failure mode
-is silence: noticing rot and neither fixing nor reporting it. If time
-pressure makes cleanup wrong right now (rare), say what you saw and left.
-Report cleanup separately from the requested change.
-
-(Measured 2026-08-22, FINDINGS §15: without this section, Fable 5 and Opus 5
-removed none of the rot beside a related change — 0/36 — and left most of it
-unmentioned. Each sentence above clears one measured holdout; shorter
-versions stopped at the first one they failed to name.)
-
 ## Cross-Project Coordination
 
 Most projects have a GitHub repo, and issues are a TODO queue coordinating
@@ -134,10 +111,6 @@ measured on — re-measure when cheap, revise openly, never drift silently.)
 - **Stated intentions about your own behavior skew deferential.** Predicted
   15–25% ask-rate on ambiguous specs; measured 0/12 across three model lines.
   Either ask now, or proceed knowing you assumed. (§7)
-- **Your default is diff-minimality, and it is silent.** Asked for a related
-  change, you notice rot beside your edit and leave it unmentioned: 0/36
-  removed, 70–90% unreported, Fable 5 and Opus 5 alike. A stated rule
-  overrides it exactly as far as its wording reaches — see Cleanup. (§15)
 - **Generation is far more deterministic than you predict.** Design choice at
   temperature 1: 12/12 identical. A genuine alternative requires adopting a
   different lens, not generating again. (§7)
