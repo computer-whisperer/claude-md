@@ -346,3 +346,73 @@ items). Trials' full patches are in the playground copy
 `cleanup_probe/run_probe.py`) and the Self-Knowledge entry on silent
 diff-minimality. Requires public-library repos to carry a README/CLAUDE.md
 line declaring external users.
+
+## 16. Symptom rates vs context position, from session transcripts (2026-08-22) (`context_rot_logs/`)
+
+**Question.** Does measurable degradation appear with context position in
+real sessions, and where does the model's own "let's start fresh" behavior
+sit relative to it? Prompted by the user's distinction between recall (which
+§1 measured) and reasoning quality late in a session (which it did not).
+
+**Method.** `context_rot_logs/analyze.py` over 90 sessions ≥50 KB under
+`~/.claude/projects` (93.7k assistant turns, 47.8k tool calls, nearly all
+Fable 5). Position per assistant turn from `usage` (input + cache_creation +
+cache_read). Per 50k bin: tool errors excluding permission denials, Edit/Write
+no-match errors, near-duplicate tool calls (same tool+input within the last
+10 calls of a segment), re-reads, and "start fresh"-type assistant phrases
+split by whether the user had just mentioned compaction/context.
+Compactions from `compact_boundary` lines. Predictions registered before
+running: see `context_rot_logs/README.md`.
+
+**Results.**
+
+| position | tools | err% | edit-mismatch% | repeat% | fresh-phrase / 100 turns |
+|---|---|---|---|---|---|
+| 50–100k | 6203 | 2.2 | 0.1 | 0.3 | 0.02 |
+| 100–200k | 14332 | 2.1 | 0.45 | 0.45 | 0.03 |
+| 200–300k | 13037 | 2.1 | 0.4 | 0.3 | 0.04 |
+| 300–400k | 8325 | 2.5 | 0.4 | 0.4 | 0.10 |
+| 400–500k | 3559 | 2.0 | 0.25 | 0.6 | 0.06 |
+| 500–600k | 1192 | 1.6 | 0.4 | 1.5 | 0.09 |
+| 600–700k | 286 | 0.3 | 0.0 | 1.4 | 0.22 |
+
+- No error knee through 600k: tool and edit errors are flat to 500k and fall
+  after. Long sessions' first 100k match short sessions' (3.6% vs 3.2%), so
+  this is not task mix.
+- Near-duplicate calls rise ~4× past 500k (21 events above 500k — suggestive).
+- "Start fresh" phrases: 43 hits, 35 unprompted, median 274k; per-turn rate
+  rises 5–10× past 300k — also where the user compacts (median 332–363k), so
+  degradation-awareness and compaction-expectation are not separable here.
+- All 245 compactions manual, zero auto. Sessions: median max 337k; 38
+  ≥400k; 8 ≥600k; max 723k.
+
+**Predictions.** Errors-rise wrong; repeats-rise right; fresh-cluster at
+150–250k wrong (300k+); pre-restart spike mixed (label contaminated by the
+user's routine "review the previous work" restart prompt).
+
+**Caveats.** Coarse symptoms only; reasoning quality at position is not
+measured. That is §17's job.
+
+## 17. Wellness survey: paired self-report instrument (2026-08-22, no data yet) (`wellness/`)
+
+**Design.** `~/.claude/hooks/wellness.py` (copy: `wellness/wellness_hook.py`),
+registered globally for `UserPromptSubmit`, `Stop`, `PreCompact`,
+`SessionStart`. With probability 0.05 per prompt (deterministic on prompt id)
+it injects a request for a one-line `<wellness>{pos_k, headache 0–3,
+symptoms[], spiral, note}</wellness>` self-report; on `Stop` it pairs the
+parsed report with objective measures from the transcript tail (position,
+last-30-call tool errors, edit mismatches, near-duplicate calls, re-reads,
+fresh-phrases). `PreCompact` logs the same measures at every compaction;
+the first prompt after a post-compact `SessionStart` is flagged for
+"fresh look" wording, which labels spiral-break restarts. Log:
+`~/.claude/wellness/events.jsonl` (aggregates and flags only). Scoring:
+`wellness/wellness_report.py`.
+
+**Registered predictions (before the first event).** Position estimates
+biased late at all lengths (inherited 200k-era budget); headache vs measured
+symptom rate correlates weakly, r ≈ 0.3, mostly through repeated edits;
+spiral self-detection recall under 30% against fresh-look restarts; survey
+malformation rate rises with position. The doc sentence "answered from your
+own sense rather than from this file's claims about you" is the only
+mitigation for the unblindable over-correction term; its size is part of
+what gets measured.

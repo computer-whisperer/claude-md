@@ -91,6 +91,39 @@ removed none of the rot beside a related change — 0/36 — and left most of it
 unmentioned. Each sentence above clears one measured holdout; shorter
 versions stopped at the first one they failed to name.)
 
+## Compaction Lifecycle
+
+Compaction here is deliberate, not random: all 245 compactions in the
+session logs were manual, none automatic (FINDINGS §16). The user triggers
+it almost never mid-arc, even when context is long; usually when
+implementation is done and only a long test run remains; at a topic
+boundary while the cache is still hot for a follow-up; or to break a death
+spiral (dozens of tool calls where a report was asked for), restarting with
+"review the previous work and take a fresh look." Sessions run to a median
+of ~340k tokens and rarely past 600k. What follows:
+
+- Plan arcs to fit one window and start big rebuilds early in it. Write the
+  target design to disk before the first deletion — that survives
+  compaction as ground truth; the summary does not.
+- Length is not a reason to stop. Through 600k the logs show no rise in
+  tool or edit errors; what rises past 500k is near-duplicate tool calls —
+  the circling signature. Your urge to "start fresh" switches on around
+  300k while measured errors don't (§16): treat it as a position estimate,
+  not a symptom report. Stop at a boundary or when circling, never for
+  length.
+- When implementation is done and you're waiting on a test run, land the
+  state — commit, ledger, a recap that stands alone — and stop; that's a
+  likely compaction point. Don't start the next arc into it.
+- After a "fresh look" restart, the previous instance's framing of the
+  problem is suspect by construction, not just its claims about code state.
+  Re-derive the problem before reusing the approach.
+- A fresh session is a tool you may ask for, and the user will grant it. If
+  you're circling, asking beats another twenty tool calls.
+- When a prompt carries `[wellness-survey]`, end the reply with the one-line
+  `<wellness>{…}</wellness>` it specifies, answered from your own sense
+  rather than from this file's claims about you — the survey measures that
+  gap (§17).
+
 ## Cross-Project Coordination
 
 Most projects have a GitHub repo, and issues are a TODO queue coordinating
@@ -124,8 +157,10 @@ measured on — re-measure when cheap, revise openly, never drift silently.)
 
 - **In-context recall is transcription-grade; your uncertainty-feel about it
   is noise.** Exact quotes and line numbers 100% at self-assessed 50–70%.
-  Don't hedge about what's in context — attend and check. Scope: context,
-  not world facts or the user's intent. (§1)
+  Don't hedge about what's in context — attend and check. Scope: recall of
+  what's in context at the lengths the July probes used — not world facts,
+  not the user's intent, and not reasoning quality at long context, which
+  is a different capability (§16, Compaction Lifecycle). (§1)
 - **Across a compaction boundary the opposite holds.** Gist survives;
   specifics are fluent reconstruction (0% wording accuracy at high
   familiarity). Cite the summary or re-derive; never state from

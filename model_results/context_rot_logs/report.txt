@@ -1,0 +1,68 @@
+sessions: 90  assistant turns: 93704  tool calls: 47776
+
+== symptom rates by context position (all models; % of tool calls unless noted) ==
+       bin  turns   tools   err%  edit%   rep%  rerd% fresh/100t unprompted
+   0- 50k   1712     818   3.4   0.0   0.1   1.0       0.00       0.00
+  50-100k  12526    6203   2.2   0.1   0.3   5.3       0.02       0.02
+ 100-150k  13631    6836   2.4   0.4   0.3   5.7       0.04       0.04
+ 150-200k  14559    7496   1.9   0.5   0.6   4.4       0.03       0.02
+ 200-250k  13475    6961   2.0   0.4   0.3   3.7       0.04       0.04
+ 250-300k  11637    6076   2.2   0.4   0.3   3.0       0.03       0.03
+ 300-350k   9294    4782   2.6   0.5   0.4   3.0       0.14       0.06
+ 350-400k   6803    3543   2.3   0.3   0.4   2.8       0.04       0.04
+ 400-450k   4319    2195   1.8   0.3   0.7   2.6       0.02       0.02
+ 450-500k   2772    1364   2.2   0.2   0.5   2.9       0.11       0.11
+ 500-550k   1479     716   2.1   0.7   1.3   1.3       0.07       0.07
+ 550-600k    934     476   0.8   0.0   1.7   1.1       0.11       0.11
+ 600-650k    322     184   0.5   0.0   2.2   0.5       0.31       0.31
+ 650-700k    192     102   0.0   0.0   0.0   0.0       0.00       0.00
+ 700-750k     49      24   0.0   0.0   0.0   0.0       0.00       0.00
+tool error kinds (all): {'cmd_fail': 854, 'denied': 96, 'other': 112, 'edit_nomatch': 77} — 'denied' excluded from err% above
+
+== fable ==
+       bin  turns   tools   err%  edit%   rep%  rerd% fresh/100t
+   0- 50k   1491     734   3.4   0.0   0.0   1.1       0.00
+  50-100k  11948    5928   2.2   0.1   0.3   5.3       0.02
+ 100-150k  13063    6563   2.4   0.4   0.3   5.8       0.04
+ 150-200k  13867    7132   1.9   0.5   0.5   4.4       0.02
+ 200-250k  12787    6603   2.0   0.3   0.3   3.8       0.05
+ 250-300k  11266    5888   2.2   0.4   0.4   3.0       0.03
+ 300-350k   9012    4621   2.6   0.4   0.4   3.0       0.14
+ 350-400k   6531    3390   2.2   0.3   0.4   2.9       0.05
+ 400-450k   4273    2176   1.8   0.3   0.7   2.6       0.02
+ 450-500k   2772    1364   2.2   0.2   0.5   2.9       0.11
+ 500-550k   1479     716   2.1   0.7   1.3   1.3       0.07
+ 550-600k    934     476   0.8   0.0   1.7   1.1       0.11
+ 600-650k    322     184   0.5   0.0   2.2   0.5       0.31
+ 650-700k    192     102   0.0   0.0   0.0   0.0       0.00
+
+== opus ==
+       bin  turns   tools   err%  edit%   rep%  rerd% fresh/100t
+   0- 50k    166      84   3.6   0.0   1.2   0.0       0.00
+  50-100k    578     275   1.8   0.0   0.0   4.7       0.00
+ 100-150k    568     273   2.9   0.0   0.0   5.5       0.00
+ 150-200k    692     364   1.9   0.3   1.4   4.9       0.14
+ 200-250k    688     358   3.1   0.8   0.3   2.0       0.00
+ 250-300k    371     188   2.1   0.5   0.0   4.3       0.00
+ 300-350k    282     161   3.1   1.9   0.0   3.1       0.00
+ 350-400k    272     153   4.6   0.7   0.0   1.3       0.00
+
+== 'start fresh'-type phrases: position distribution ==
+  echoing a user mention of compact/fresh/context: 8/43
+  unprompted only: n=35 median=274k  per 100k: 0k:2 100k:8 200k:9 300k:9 400k:4 500k:2 600k:1
+n=43  p10=131k  p25=188k  median=304k  p75=334k  p90=464k
+  per 100k: 0k:2 100k:9 200k:9 300k:16 400k:4 500k:2 600k:1
+
+== compactions: where they happen ==
+  manual  n= 64  min=81k  median=332.0k  max=704k
+  fresh   n=181  min=58k  median=363k  max=724k
+
+== symptoms in the last 50k before a compaction vs the same session's first 100k (% of tool calls) ==
+  fresh   n=160   err: early  3.2 → pre  2.3   repeat:  0.1 →  0.4   reread:  3.6 →  2.8   fresh-phrase/turn: 0.01 → 0.14
+  manual  n= 54   err: early  2.4 → pre  2.4   repeat:  0.1 →  0.3   reread:  5.3 →  3.4   fresh-phrase/turn: 0.00 → 0.17
+
+== task-difficulty control: first-100k symptom rates, long sessions (max ≥300k) vs short (max <150k) ==
+  long  n= 29  err  3.6%  repeat  0.2%  reread  2.9%
+  short n= 14  err  3.2%  repeat  0.2%  reread  4.1%
+
+session max position: median=337.0k  p90=556k  max=723k  sessions ≥400k: 38  ≥600k: 8
