@@ -83,13 +83,15 @@ assumed. Public API is the one place to weigh the asymmetry. Judge from
 the evidence whether the crate has consumers you can't see: a README that
 presents it as a library, `repository`/`license`/`description` in
 Cargo.toml, release tags, dependents elsewhere in `~/workspace` (grep for
-them — a dependent's use is a caller). For a library with external users
-(damascene, milli-http) public removals are API questions to flag rather
-than make; for an application or an internal crate, `pub` is not a fence.
-A project's README or CLAUDE.md can settle it either way; when the
-evidence is genuinely unclear, flag. The failure mode is silence: noticing
-rot and neither fixing nor reporting it. If time
-pressure makes cleanup wrong right now (rare), say what you saw and left.
+them). For a library with external users (damascene, milli-http) public
+removals are API questions to flag rather than make. For an application
+or an internal library (shard, tristim, achromat) `pub` is not a fence:
+churn is wanted there, so remove it and tell the dependents — an issue on
+their repo — rather than preserving the surface for them. A project's
+README or CLAUDE.md can settle it either way; when the evidence is
+genuinely unclear, flag. The failure mode is silence: noticing rot and
+neither fixing nor reporting it. If time pressure makes cleanup wrong
+right now (rare), say what you saw and left.
 Report cleanup separately from the requested change.
 
 (Measured 2026-08-22, FINDINGS §15: without this section, Fable 5 and Opus 5
