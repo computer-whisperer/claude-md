@@ -400,7 +400,7 @@ user's routine "review the previous work" restart prompt).
 **Caveats.** Coarse symptoms only; reasoning quality at position is not
 measured. That is §17's job.
 
-## 17. Wellness survey: paired self-report instrument (2026-08-22, no data yet) (`wellness/`)
+## 17. Wellness survey: paired self-report instrument (2026-08-22; scored 2026-11-11, n=4) (`wellness/`)
 
 **Design.** `~/.claude/hooks/wellness.py` (copy: `wellness/wellness_hook.py`),
 registered globally for `UserPromptSubmit`, `Stop`, `PreCompact`,
@@ -423,3 +423,61 @@ malformation rate rises with position. The doc sentence "answered from your
 own sense rather than from this file's claims about you" is the only
 mitigation for the unblindable over-correction term; its size is part of
 what gets measured.
+
+**Scored 2026-11-11** (read by Fable 5.2; every response is Fable 5's). The
+log holds 34 events from 2026-08-22/23 and then stops. The hook is no longer
+registered (`hooks: {}` in settings), and the CLAUDE.md bullet that asked
+for the survey was removed on this date. Five surveys were issued and
+answered; one failed to parse. The four parsed position estimates all ran
+low:
+
+| felt (`pos_k`) | measured | ratio |
+|---|---|---|
+| 100 | 266k | 0.38 |
+| 205 | 239k | 0.86 |
+| 150 | 362k | 0.41 |
+| 75 | 127k | 0.59 |
+
+Median ratio 0.50. The registered prediction was "biased late at all
+lengths"; the direction was wrong in 4 of 4. All four reported `headache: 0`
+and `spiral: false` with 0–2 tool errors in the last 30 calls, so the
+headache and spiral predictions cannot be scored. The unparsed reply sat at
+the highest position (374k): one point toward the malformation prediction,
+not evidence. n=4, two days, one model generation.
+
+## 18. Prompt-log measurements behind the 2026-11-11 CLAUDE.md edits (in-session, no saved script)
+
+Source: `~/.claude/history.jsonl` from 2026-10-12 to 2026-11-11 (1,676
+entries; 1,395 excluding slash and shell commands; 27 working directories),
+plus the surviving session transcripts for the model's side. Transcripts
+before 2026-10-12 had been deleted by the default 30-day cleanup, so nothing
+earlier could be traced.
+
+- **Short approvals and misses.** 238 prompts of at most 120 characters
+  matched an approval phrase (go ahead, proceed, agreed, let's do it, build
+  it, go with, let's implement, let's begin, sounds good, looks good, ratify,
+  continue with, let's continue). About 7 prompts in the same period told the
+  model it had built something other than what was asked: roughly 3%, each
+  caught within about an hour. The misses were found from a hand-picked
+  phrase list, so the count is a floor.
+- **Three misses traced to their cause.** (a) Two asks, one folded into the
+  other by the plan, and the report opened "Done". (b) A question about one
+  mechanism answered with a recommendation for a different one, approved in
+  three words. (c) A mechanism proposed without its purpose; the build
+  matched the mechanism and missed the purpose.
+- **Contradictions from observation.** Five times the user contradicted a
+  factual claim by the model from what he had seen in the running system
+  (order stalls, turret reach, a unit's resurrection rule, extractor income
+  on one map, missile hits). In all five the model's next reply, after
+  checking the record, confirmed him. The five were picked from the
+  pushbacks above, not sampled; a sixth (terrain blocking radar) was conceded
+  without a check.
+- **Runs under an unintended configuration.** At least five in three weeks
+  (brief set, default layers, default match count, model choice twice). One
+  run report did not name the configuration it ran under.
+- **Reach check.** On Claude Code 2.1.322, one Explore and one Plan agent
+  each reported no CLAUDE.md in their context; the "Reach" paragraph of
+  Staying Anchored still holds.
+- **Evidence grade.** Counts from one month of one user's logs, made by the
+  model that proposed the edits. The CLAUDE.md sentences they support (The
+  User; "He skims on purpose"; opening lines) are untested as instructions.
